@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "AMD",
+    "target": "es5",
+    "sourceMap": true
+  },
+  "include": [
+    "./source/language/worker/console.worker.ts",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
