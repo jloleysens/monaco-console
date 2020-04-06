@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "build:worker": "yarn webpack --config webpack.language-worker.config.js",
+    "watch:worker": "yarn build:worker --watch",
+    "build": "yarn webpack --config webpack.config.js",
+    "watch": "yarn build --watch"
+  },
   "devDependencies": {
     "@types/node": "^13.11.0",
     "css-loader": "^3.4.2",
