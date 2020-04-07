@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "module": "AMD",
+    "moduleResolution": "Node",
     "target": "es5",
     "sourceMap": true
   },
   "include": [
-    "./source/language/worker/console.worker.ts",
+    "source/language/worker/console_worker.ts"
   ],
   "exclude": [
     "node_modules"

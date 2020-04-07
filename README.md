@@ -5,7 +5,9 @@ This is a toy application that uses webpack to create two bundles:
 1. The application code intended for the main thread.
 2. The worker code intended for a WebWorker thread.
 
-The worker code is built targeting AMD per Monaco's requirements for a WebWorker module.
+The worker code is built targeting AMD [per Monaco's requirements](https://microsoft.github.io/monaco-editor/api/modules/monaco.editor.html#createwebworker) for a WebWorker module.
+
+In practice, though, bundling with Webpack seems to be sufficient without targeting AMD in tsconfig.
 
 The primary goal of this code is to derisk using the existing Console grammar logic inside of Monaco and to derisk bundling of a worker that we can ship with Kibana.
 

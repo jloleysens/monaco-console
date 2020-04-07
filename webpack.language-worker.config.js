@@ -15,7 +15,10 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader'
+        loader: 'ts-loader',
+        options: {
+          configFile: resolve(__dirname, './tsconfig.worker.json'),
+        }
       },
       {
         test: /\.css$/,
