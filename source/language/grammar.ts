@@ -407,4 +407,4 @@ export const createParser = () => {
       }({ '': result }, ''))
       : result;
   };
-}
+};

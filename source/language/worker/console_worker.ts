@@ -1,5 +1,4 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-// import {createParser} from '../../../../console-grammar-research';
 import {createParser} from '../grammar';
 
 export class ConsoleWorker {
