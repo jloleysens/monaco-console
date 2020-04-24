@@ -1,10 +1,10 @@
-const {resolve} = require('path');
+const path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: resolve(__dirname, './source/language/worker/console.worker.ts'),
+  entry: path.resolve(__dirname, './source/language/worker/console.worker.ts'),
   output: {
-    path: resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'public_dist'),
     filename: 'bundle.amd.worker.js'
   },
   resolve: {
@@ -17,7 +17,7 @@ module.exports = {
         test: /\.tsx?$/,
         loader: 'ts-loader',
         options: {
-          configFile: resolve(__dirname, './tsconfig.worker.json'),
+          configFile: path.resolve(__dirname, './tsconfig.worker.json'),
         }
       },
       {

@@ -4,19 +4,22 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build:worker": "yarn webpack --config webpack.language-worker.config.js",
+    "build:worker": "webpack --config webpack.language-worker.config.js",
     "watch:worker": "yarn build:worker --watch",
-    "build": "yarn webpack --config webpack.config.js",
-    "watch": "yarn build --watch"
+    "build": "webpack --config webpack.config.js",
+    "watch": "yarn build --watch",
+    "serve": "webpack-dev-server --open"
   },
   "devDependencies": {
     "@types/node": "^13.11.0",
     "css-loader": "^3.4.2",
+    "html-webpack-plugin": "^4.2.0",
     "style-loader": "^1.1.3",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
     "monaco-editor": "^0.20.0"

@@ -17,7 +17,7 @@ const wps = new WorkerProxyService();
 window.MonacoEnvironment = {
   getWorkerUrl: (id, label) => {
     // In kibana we will probably build this once and then load with raw-loader
-    return './dist/bundle.amd.worker.js';
+    return './public_dist/bundle.amd.worker.js';
   }
 };
 

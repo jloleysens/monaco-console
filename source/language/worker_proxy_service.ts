@@ -27,7 +27,7 @@ export class WorkerProxyService {
 
   public setup() {
     this.worker = monaco.editor.createWebWorker({
-      moduleId: 'bundle.amd.worker.js',
+      moduleId: '',
       label: 'console',
       keepIdleModels: true,
     });
