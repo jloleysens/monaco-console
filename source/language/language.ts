@@ -3,8 +3,9 @@ import 'monaco-editor/esm/vs/editor/contrib/hover/hover'
 import 'monaco-editor/esm/vs/editor/contrib/wordOperations/wordOperations'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {WorkerProxyService} from './worker_proxy_service';
+import './lexer_rules';
+import {ID} from './constants';
 
-export const ID = 'console';
 
 export const language: monaco.languages.ILanguageExtensionPoint  = {
   id: ID,
