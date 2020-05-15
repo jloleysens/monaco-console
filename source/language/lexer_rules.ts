@@ -44,11 +44,14 @@ const lexerRules: monaco.languages.IMonarchLanguage = {
         ],
       ],
 
+      [/{/, { token: '@bracket', next: 'xjson' }],
+      [/}/, { token: '@bracket' }],
+
       // whitespace
       { include: '@whitespace' },
 
       // delimiters and operators
-      [/[{}\[\]]/, '@brackets'],
+      // [/[{}\[\]]/, '@brackets'],
 
       // @ annotations.
       // As an example, we emit a debugging log message on these tokens.
@@ -150,6 +153,35 @@ const lexerRules: monaco.languages.IMonarchLanguage = {
 
     whitespace: [
       [/[ \t\r\n]+/, { token: 'whitespace', log: 'whitespace token $0' }],
+    ],
+
+    xjson: [
+      [/{/, { token: 'paren.lparen', next: '@push' }],
+      [/}/, { token: 'paren.rparen', next: '@pop' }],
+      [/[[(]/, { token: 'paren.lparen' }],
+      [/[\])]/, { token: 'paren.rparen' }],
+      [/,/, { token: 'punctuation.comma' }],
+      [/:/, { token: 'punctuation.colon' }],
+      [/\s+/, { token: 'whitespace' }],
+      [/["](?:(?:\\.)|(?:[^"\\]))*?["]\s*(?=:)/, { token: 'variable' }],
+      [/"""/, { token: 'string_literal', next: 'string_literal' }],
+      [/0[xX][0-9a-fA-F]+\b/, { token: 'constant.numeric' }],
+      [
+        /[+-]?\d+(?:(?:\.\d*)?(?:[eE][+-]?\d+)?)?\b/,
+        { token: 'constant.numeric' },
+      ],
+      [/(?:true|false)\b/, { token: 'constant.language.boolean' }],
+      [/['](?:(?:\\.)|(?:[^'\\]))*?[']/, { token: 'invalid' }],
+      [/.+?/, { token: 'text' }],
+      [/\/\/.*$/, { token: 'invalid' }],
+    ],
+
+    string_literal: [
+      [
+        /"""/,
+        { token: 'punctuation.end_triple_quote', next: '@pop', log: 'test' },
+      ],
+      [/./, { token: 'multi_string' }],
     ],
   },
 }
