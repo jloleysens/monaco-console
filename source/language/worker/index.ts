@@ -1,1 +1,1 @@
-export {ConsoleWorker} from './console_worker';
+export { ConsoleWorker } from './console_worker'

@@ -1,2 +1,2 @@
-export * from './language';
-export {ID} from './constants';
+export * from './language'
+export { ID } from './constants'

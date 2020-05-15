@@ -1,1 +1,1 @@
-export const ID = 'console';
+export const ID = 'console'

@@ -14,8 +14,8 @@ module.exports = {
     extensions: ['.js', '.ts', '.tsx']
   },
   devServer: {
-    contentBase: path.join(__dirname, 'public_dist'),
-    contentBasePublicPath: '/public_dist'
+    // contentBase: path.join(__dirname, 'public_dist'),
+    // contentBasePublicPath: '/public_dist'
   },
   module: {
     rules: [

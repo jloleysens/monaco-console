@@ -1,61 +1,62 @@
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import {ID} from './constants';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import { ID } from './constants'
 
 const globals = {
-  keywords: [
-    'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'goto', 'do',
-    'if', 'private', 'this', 'break', 'protected', 'throw', 'else', 'public',
-    'enum', 'return', 'catch', 'try', 'interface', 'static', 'class',
-    'finally', 'const', 'super', 'while', 'true', 'false'
-  ],
-  symbols: /[=><!~?:&|+\-*\/\^%]+/,
   escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
 }
 
-const lexerRules: monaco.languages.IMonarchLanguage = ({
-  ...globals as any,
+export function addEOL(
+  reg: RegExp,
+  actions: monaco.languages.IExpandedMonarchLanguageAction[],
+  nextIfEOL: string
+) {
+  return [
+    [
+      reg,
+      actions.map((action) => ({
+        cases: {
+          '@eos': { ...action, switchTo: nextIfEOL },
+          '@default': action,
+        },
+      })),
+    ],
+  ]
+}
 
-  // operators: [
-  //   '=', '>', '<', '!', '~', '?', ':', '==', '<=', '>=', '!=',
-  //   '&&', '||', '++', '--', '+', '-', '*', '/', '&', '|', '^', '%',
-  //   '<<', '>>', '>>>', '+=', '-=', '*=', '/=', '&=', '|=', '^=',
-  //   '%=', '<<=', '>>=', '>>>='
-  // ],
+const lexerRules: monaco.languages.IMonarchLanguage = {
+  ...(globals as any),
 
-  // we include these common regular expressions
-
-  // C# style strings
+  defaultToken: 'invalid',
 
   // The main tokenizer for our languages
   tokenizer: {
     root: [
-      ['#!.*$' as any, 'warning'],
+      [/#!.*$/ as any, 'warning'],
       [/^#.*$/, 'comment'],
-      // identifiers and keywords
-      // [/[a-z_$][\w$]*/, {
-      //   cases: {
-      //     '@method': 'keyword',
-      //     '@keywords': 'keyword',
-      //     '@default': 'identifier'
-      //   }
-      // }],
-      [/[a-zA-Z]+/, {token: 'type.identifier', next: 'method_sep', log: 'method token $0'}],
+      [
+        /(GET|PUT|POST|HEAD|DELETE)/,
+        [
+          {
+            token: 'type.identifier',
+            log: 'method token $0',
+            switchTo: 'methodSep',
+          },
+        ],
+      ],
 
       // whitespace
-      {include: '@whitespace'},
+      { include: '@whitespace' },
 
       // delimiters and operators
-      [/[{}()\[\]]/, '@brackets'],
-      [/@symbols/, {
-        cases: {
-          '@default': ''
-        }
-      }],
+      [/[{}\[\]]/, '@brackets'],
 
       // @ annotations.
       // As an example, we emit a debugging log message on these tokens.
       // Note: message are supressed during the first load -- change some lines to see them.
-      [/@\s*[a-zA-Z_\$][\w\$]*/, {token: 'annotation', log: 'annotation token: $0'}],
+      [
+        /@\s*[a-zA-Z_\$][\w\$]*/,
+        { token: 'annotation', log: 'annotation token: $0' },
+      ],
 
       // numbers
       [/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
@@ -66,51 +67,91 @@ const lexerRules: monaco.languages.IMonarchLanguage = ({
       [/[;,.]/, 'delimiter'],
 
       // strings
-      [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
-      [/"/, {token: 'string.quote', bracket: '@open', next: '@string'}],
+      [/"([^"\\]|\\.)*$/, 'string.invalid'], // non-teminated string
+      [/"/, { token: 'string.quote', bracket: '@open', next: '@string' }],
 
       // characters
       [/'[^\\']'/, 'string'],
       [/(')(@escapes)(')/, ['string', 'string.escape', 'string']],
-      [/'/, 'string.invalid']
+      [/'/, 'string.invalid'],
     ],
 
-    method_sep: [
-      [/\s+/, {token: 'whitespace', log: 'whitespace token $0'}],
-      [/(https?:\/\/[^?\/,]+)/, { token: 'url.protocol_host', log: 'https token $0' }],
-      [/\//, {token: 'url.slash', log: 'anno token $0', next: 'url'}],
+    methodSep: [
+      ...addEOL(
+        /(\s+)/,
+        [{ token: 'whitespace', log: 'whitespace token $0' }],
+        'root'
+      ),
+      ...addEOL(
+        /(https?:\/\/[^?\/,]+)/,
+        [{ token: 'url.protocol_host', log: 'https token $0' }],
+        'root'
+      ),
+      ...addEOL(
+        /(\/)/,
+        [{ token: 'url.slash', log: 'url.slash token $0', switchTo: 'url' }],
+        'root'
+      ),
     ],
 
     url: [
-      [/[^?\/,\s]+/, { token: 'url.part', log: 'url.part token $0' }],
-      [/,/, { token: 'url.comma', log: 'url.comma token $0' }],
-      [/\//, {token: 'url.slash', log: 'anno token $0', next: 'url'}],
+      ...addEOL(
+        /([^?\/,\s]+)/,
+        [{ token: 'url.part', log: 'url.part token $0' }],
+        'root'
+      ),
+      ...addEOL(
+        /(,)/,
+        [{ token: 'url.comma', log: 'url.comma token $0' }],
+        'root'
+      ),
+      ...addEOL(
+        /(\/)/,
+        [{ token: 'url.slash', log: 'url.slash token $0' }],
+        'root'
+      ),
+      ...addEOL(
+        /(\?)/,
+        [
+          {
+            token: 'url.questionmark',
+            log: 'url.questionmark token $0',
+            next: 'urlParams',
+          },
+        ],
+        'root'
+      ),
     ],
 
-    // maybe_schema: [
-    //   {}
-    //   []
-    //   { regex  }
-    // ] ,
-
-    comment: [
-      [/[^\/*]+/, 'comment'],
-      [/\/\*/, 'comment', '@push'],    // nested comment
-      ["\\*/" as any, 'comment', '@pop'],
-      [/[\/*]/, 'comment']
+    urlParams: [
+      ...addEOL(
+        /([^&=]+)(=)([^&]*)/,
+        [
+          { token: 'url.param', log: 'url.param token $1' },
+          { token: 'url.equal', log: 'url.equal token $2' },
+          { token: 'url.value', log: 'ok', switchTo: 'root' },
+        ],
+        'root'
+      ),
+      ...addEOL(
+        /([a-zA-Z0-9]+)/,
+        [{ token: 'url.param', log: 'url.param token $0' }],
+        'root'
+      ),
+      ...addEOL(/(&)/, [{ token: 'url.amp', log: 'url.amp token $0' }], 'root'),
     ],
 
     string: [
       [/[^\\"]+/, 'string'],
       [/@escapes/, 'string.escape'],
       [/\\./, 'string.escape.invalid'],
-      [/"/, {token: 'string.quote', bracket: '@close', next: '@pop'}]
+      [/"/, { token: 'string.quote', bracket: '@close', next: '@pop' }],
     ],
 
     whitespace: [
-      [/[ \t\r\n]+/, 'whitespace'],
+      [/[ \t\r\n]+/, { token: 'whitespace', log: 'whitespace token $0' }],
     ],
   },
-});
+}
 
-monaco.languages.setMonarchTokensProvider(ID, lexerRules);
+monaco.languages.setMonarchTokensProvider(ID, lexerRules)
