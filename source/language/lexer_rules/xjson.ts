@@ -112,7 +112,14 @@ export const lexerRules: monaco.languages.IMonarchLanguage = {
   },
 }
 
-monaco.languages.setMonarchTokensProvider(ID, lexerRules)
 monaco.languages.register({
   id: ID,
+})
+monaco.languages.setMonarchTokensProvider(ID, lexerRules)
+monaco.languages.setLanguageConfiguration(ID, {
+  brackets: [['{', '}']],
+  autoClosingPairs: [
+    { open: '{', close: '}' },
+    { open: '"', close: '"' },
+  ],
 })

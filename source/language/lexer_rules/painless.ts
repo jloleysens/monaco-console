@@ -188,5 +188,5 @@ export const lexerRules = {
   },
 } as Language
 
-monaco.languages.setMonarchTokensProvider(ID, lexerRules)
 monaco.languages.register({ id: ID })
+monaco.languages.setMonarchTokensProvider(ID, lexerRules)
