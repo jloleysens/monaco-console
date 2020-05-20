@@ -20,7 +20,6 @@ window.MonacoEnvironment = {
   },
 }
 
-monaco.languages.register(language)
 monaco.languages.onLanguage(ID, async () => {
   return wps.setup()
 })
