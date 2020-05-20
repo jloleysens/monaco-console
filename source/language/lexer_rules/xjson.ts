@@ -117,9 +117,13 @@ monaco.languages.register({
 })
 monaco.languages.setMonarchTokensProvider(ID, lexerRules)
 monaco.languages.setLanguageConfiguration(ID, {
-  brackets: [['{', '}']],
+  brackets: [
+    ['{', '}'],
+    ['[', ']'],
+  ],
   autoClosingPairs: [
     { open: '{', close: '}' },
+    { open: '[', close: ']' },
     { open: '"', close: '"' },
   ],
 })
