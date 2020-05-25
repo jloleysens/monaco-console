@@ -29,6 +29,7 @@ interface Language extends monaco.languages.IMonarchLanguage {
 
 export const lexerRules = {
   default: 'invalid',
+  tokenPostfix: '',
   // painless does not use < >, so we define our own
   brackets: [
     ['{', '}', 'delimiter.curly'],
@@ -130,11 +131,10 @@ export const lexerRules = {
             '@constants': 'constant',
             '@default': 'identifier',
           },
-          log: 'alive!',
         },
       ],
       // whitespace
-      [/[ \t\r\n]+/, { token: '@whitespace' }],
+      [/[ \t\r\n]+/, { token: 'whitespace' }],
       // comments
       [/\/\*/, 'comment', '@comment'],
       [/\/\/.*$/, 'comment'],

@@ -1,15 +1,15 @@
-const path = require('path');
+const path = require('path')
 
-module.exports = {
+const createConfig = (lang) => ({
   mode: 'development',
-  entry: path.resolve(__dirname, './source/language/worker/console.worker.ts'),
+  entry: path.resolve(__dirname, `./source/${lang}/worker/${lang}.worker.ts`),
   output: {
     path: path.resolve(__dirname, 'public_dist'),
-    filename: 'bundle.amd.worker.js'
+    filename: 'bundle.amd.worker.js',
   },
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.js', '.ts', '.tsx']
+    extensions: ['.js', '.ts', '.tsx'],
   },
   module: {
     rules: [
@@ -17,13 +17,15 @@ module.exports = {
         test: /\.tsx?$/,
         loader: 'ts-loader',
         options: {
-          configFile: path.resolve(__dirname, './tsconfig.worker.json'),
-        }
+          configFile: path.resolve(__dirname, `./tsconfig.${lang}.worker.json`),
+        },
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      }
-    ]
-  }
-}
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+})
+
+module.exports = { createConfig }

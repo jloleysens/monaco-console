@@ -1,20 +1,17 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-
-const ID = 'xjson'
-
+import { ID } from '../constants'
 import './painless'
 import './esql'
 
-import { globals } from './shared'
+import { globals } from '../../shared'
 
 export const lexerRules: monaco.languages.IMonarchLanguage = {
   ...(globals as any),
 
   defaultToken: 'invalid',
+  tokenPostfix: '',
 
   tokenizer: {
-    whitespace: [[/[ \t\r\n]+/, { token: 'whitespace' }]],
-
     root: [
       [
         /("(?:[^"]*_)?script"|"inline"|"source")(\s*?)(:)(\s*?)(""")/,
@@ -30,7 +27,6 @@ export const lexerRules: monaco.languages.IMonarchLanguage = {
           },
         ],
       ],
-
       [
         /(:)(\s*?)(""")(sql)/,
         [
@@ -44,7 +40,6 @@ export const lexerRules: monaco.languages.IMonarchLanguage = {
           },
         ],
       ],
-
       [/{/, { token: 'paren.lparen', next: '@push' }],
       [/}/, { token: 'paren.rparen', next: '@pop' }],
       [/[[(]/, { token: 'paren.lparen' }],
@@ -70,7 +65,6 @@ export const lexerRules: monaco.languages.IMonarchLanguage = {
           next: '@string',
         },
       ],
-
       [/['](?:(?:\\.)|(?:[^'\\]))*?[']/, { token: 'invalid' }],
       [/.+?/, { token: 'text' }],
       [/\/\/.*$/, { token: 'invalid' }],

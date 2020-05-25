@@ -4,8 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build:worker": "webpack --config webpack.language-worker.config.js",
-    "watch:worker": "yarn build:worker --watch",
+    "build:console:worker": "webpack --config webpack.console-worker.config.js",
+    "watch:console:worker": "yarn build:console:worker --watch",
+    "build:xjson:worker": "webpack --config webpack.xjson-worker.config.js",
+    "watch:xjson:worker": "yarn build:xjson:worker --watch",
     "build": "webpack --config webpack.config.js",
     "watch": "yarn build --watch",
     "serve": "webpack-dev-server --config webpack.config.js"

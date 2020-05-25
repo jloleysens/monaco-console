@@ -1,5 +1,4 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import { globals } from './shared'
 
 const ID = 'esql'
 
@@ -196,6 +195,7 @@ const builtinFunctions = [
 export const lexerRules = {
   defaultToken: 'invalid',
   ignoreCase: true,
+  tokenPostfix: '',
   keywords,
   builtinFunctions,
   brackets,
@@ -209,7 +209,6 @@ export const lexerRules = {
             '@builtinFunctions': 'identifier',
             '@default': 'identifier',
           },
-          log: 'here!',
         },
       ],
       [/[()]/, '@brackets'],

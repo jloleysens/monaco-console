@@ -1,9 +1,9 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { ID } from '../constants'
 
-import { lexerRules as xjson } from './xjson'
+import { lexerRules as xjson } from '../../xjson/lexer_rules'
 
-import { globals } from './shared'
+import { globals } from '../../shared'
 
 export function addEOL(
   reg: RegExp,
@@ -27,6 +27,7 @@ const lexerRules: monaco.languages.IMonarchLanguage = {
   ...(globals as any),
 
   defaultToken: 'invalid',
+  tokenPostfix: '',
 
   // The main tokenizer for our languages
   tokenizer: {

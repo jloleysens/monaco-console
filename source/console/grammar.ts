@@ -378,7 +378,7 @@ export const createParser = () => {
       }
     }
 
-  return function (source: string, reviver: (key: string, value: any) => any) {
+  return function (source: string) {
     let result
 
     text = source
@@ -390,25 +390,6 @@ export const createParser = () => {
 
     result = { annotations: annos }
 
-    return typeof reviver === 'function'
-      ? (function walk(holder, key) {
-          let k,
-            v,
-            value = holder[key]
-          if (value && typeof value === 'object') {
-            for (k in value) {
-              if (Object.hasOwnProperty.call(value, k)) {
-                v = walk(value, k)
-                if (v !== undefined) {
-                  value[k] = v
-                } else {
-                  delete value[k]
-                }
-              }
-            }
-          }
-          return reviver.call(holder, key, value)
-        })({ '': result }, '')
-      : result
+    return result
   }
 }
